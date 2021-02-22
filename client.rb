@@ -1,5 +1,6 @@
 require 'socket'
 require 'json'
+require_relative 'action_listener'
 
 class Client
   MAX_PACKET_SIZE = 255
@@ -7,6 +8,7 @@ class Client
   def initialize(controller)
     @socket = new_client_socket
     @controller = controller
+    @listener = ActionListener.new(@socket, @controller)
   end
 
   def connect(host, port)
@@ -15,7 +17,7 @@ class Client
   end
 
   def pump
-    process_packet(@socket.recvfrom(MAX_PACKET_SIZE))
+    @listener.pump
   end
 
   def send(action, params)
@@ -23,16 +25,6 @@ class Client
   end
 
   private
-
-  def process_packet(packet)
-    packet = JSON.parse(packet[0])
-    return unless packet.key?('action')
-
-    action = packet['action'].to_sym
-    raise "Action not found (#{action}) on controller: #{@controller}." unless @controller.methods.include?(action)
-
-    @controller.method(action).call(action_params(packet))
-  end
 
   def format_action(action, params)
     { 'action': action }.merge(params).to_json
@@ -49,12 +41,6 @@ class Client
     min_port = 49512
     random = Random.new
     ((random.rand * (max_port - min_port)) + min_port).to_i
-  end
-
-  def action_params(packet)
-    packet.dup.tap do |params|
-      params.delete(:action)
-    end
   end
 end
 
