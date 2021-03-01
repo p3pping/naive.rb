@@ -1,7 +1,7 @@
 require 'socket'
-require_relative './action_listener'
-require_relative './action_caller'
-require_relative './action_sender'
+require_relative './lib/action_listener'
+require_relative './lib/action_caller'
+require_relative './lib/action_sender'
 
 class TestController
   def hello(to)
