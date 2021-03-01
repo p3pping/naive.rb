@@ -1,6 +1,7 @@
 require 'socket'
 require_relative './action_listener'
 require_relative './action_caller'
+require_relative './action_sender'
 
 class TestController
   def hello(to)
@@ -8,10 +9,35 @@ class TestController
   end
 end
 
-s = UDPSocket.new
-s.bind('127.0.0.1', 9001)
+class TestClient
+  def initialize(controller)
+    @socket = UDPSocket.new
+    @socket.bind('127.0.0.1', 9001)
 
-l = ActionListener.new(s)
-c = ActionCaller.new(TestController.new)
-c.call(l.listen)
+    @listener = ActionListener.new(@socket)
+    @caller = ActionCaller.new(controller)
+  end
 
+  def pump
+    @caller.call(@listener.listen)
+  end
+end
+
+class TestServer
+  def initialize
+    @socket = UDPSocket.new
+    @socket.bind('127.0.0.1', 9002)
+
+    @sender = ActionSender.new(@socket)
+  end
+
+  def send
+    @sender.send(Action.new('hello', 'TESTER', Channel.new('127.0.0.1', 9001)))
+  end
+end
+
+client = TestClient.new(TestController.new)
+server = TestServer.new
+
+server.send
+client.pump

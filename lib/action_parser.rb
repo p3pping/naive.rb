@@ -7,7 +7,7 @@ class ActionParser
   
   def self.to_s(action)
     {
-      action: action.action,
+      action: action.name,
       params: action.params
     }.to_json
   end
