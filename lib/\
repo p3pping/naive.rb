@@ -1,0 +1,10 @@
+class ActionCaller
+  def initialize(controller)
+    @controller = controller
+  end
+
+  def call(action)
+    @controller.method(action.name).call(*params)
+  end
+end
+
