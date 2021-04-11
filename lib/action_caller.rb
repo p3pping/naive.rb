@@ -5,7 +5,7 @@ class ActionCaller
 
   def call(action)
     print(@controller)
-    @controller.method(action.name).call(*action.params)
+    @controller.method(action.name).call(*action.params, channel: action.channel)
   end
 end
 
