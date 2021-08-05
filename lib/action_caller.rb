@@ -8,4 +8,3 @@ class ActionCaller
     @controller.method(action.name).call(*action.params, channel: action.channel)
   end
 end
-
