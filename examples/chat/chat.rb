@@ -1,8 +1,8 @@
-require_relative './client.rb'
-require_relative './client_controller.rb'
+require_relative './client'
+require_relative './client_controller'
 
-require_relative './server.rb'
-require_relative './server_controller.rb'
+require_relative './server'
+require_relative './server_controller'
 
 module Examples
   module Chat
