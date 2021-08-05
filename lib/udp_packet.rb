@@ -1,5 +1,6 @@
 class UDPPacket
   attr_reader :data, :family, :port, :host, :resolved_host
+
   def initialize(packet)
     @data = packet[0]
     @family = packet[1][0]
@@ -8,4 +9,3 @@ class UDPPacket
     @host = packet[1][3]
   end
 end
-

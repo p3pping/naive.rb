@@ -14,4 +14,3 @@ class ActionSender
     )
   end
 end
-

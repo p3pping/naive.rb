@@ -20,4 +20,3 @@ class Action
     @channel = channel
   end
 end
-

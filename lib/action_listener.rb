@@ -7,7 +7,7 @@ class ActionListener
   def initialize(socket)
     @socket = socket
   end
-  
+
   def listen
     Action.from_packet(
       UDPPacket.new(
@@ -16,4 +16,3 @@ class ActionListener
     )
   end
 end
-
